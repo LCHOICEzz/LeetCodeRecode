@@ -1,0 +1,56 @@
+Given a non-empty array of integers, return the third maximum number in this array. If it does not exist, return the maximum number. The time complexity must be in O(n).
+
+Example 1:
+Input: [3, 2, 1]
+
+Output: 1
+
+Explanation: The third maximum is 1.
+Example 2:
+Input: [1, 2]
+
+Output: 2
+
+Explanation: The third maximum does not exist, so the maximum (2) is returned instead.
+Example 3:
+Input: [2, 2, 3, 1]
+
+Output: 1
+
+Explanation: Note that the third maximum here means the third maximum distinct number.
+Both numbers with value 2 are both considered as second maximum.
+
+
+
+没什么特别的，直接构建一个K大小的空数组，每次找到最小的与新元素比较，大于则剔除并删除该元素，同时新增到k维数组中
+class Solution(object):
+    def thirdMax(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        nums = set(nums)
+        nums = list(nums)
+        length = len(nums)
+        
+        if length==1:
+            return nums[0]
+        if length ==2:
+            return nums[0] if nums[0]>nums[1] else nums[1]
+        if length ==3:
+            cand_max = nums[0] if nums[0]<nums[1] else nums[1]
+            return cand_max if cand_max<nums[2] else nums[2]
+        
+        result_list = set()
+        for ele in nums:
+            result_len = len(result_list)
+            if result_len<3:
+                result_list.add(ele)
+            else:
+                min_val = min(result_list)
+                if ele > min_val:
+                    result_list.remove(min_val)
+                    result_list.add(ele)
+        return min(result_list)
+            
+        

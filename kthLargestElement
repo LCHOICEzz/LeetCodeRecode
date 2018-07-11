@@ -1,0 +1,65 @@
+/*
+给定一个数组，求第k大的元素
+*/
+
+void swap(vector<int> &nums, int i, int j){
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+int Partition(vector<int> &nums, int l, int r){
+    int i =l, j=r+1;
+    int x = nums[l];
+    while(true){
+        while(nums[++i]<x && i<j);
+        while(nums[--j]>x);
+        if(i>=j) break;
+        swap(nums,i,j);
+    }
+    nums[l] = nums[j];
+    nums[j] = x;
+    return j;
+}
+
+int Select(int l,int r, vector<int> &nums,int k){
+    if(l==r){
+        return nums[r];
+    }
+    int i = Partition(nums,l,r);//下标为i的元素
+    int j = r-i+1;//第j大元素
+    if(j==k)
+        return nums[i];
+    if(j<k)
+        return Select(l,i-1,nums,k-j);
+        
+    if(j>k)
+        return Select(i+1,r,nums,k);
+}
+int main(int argc, char const *argv[])
+{
+    /* code */
+    std::vector<int> v;//={8,10,12,4,11,17};
+    v.push_back(8);
+    v.push_back(10);
+    v.push_back(12);
+    v.push_back(4);
+    v.push_back(11);
+    v.push_back(17);
+    //int i = Partition(v,0,v.size()-1);
+    //kthLargestElement(4,)
+    //int result = Select(0, v.size()-1, v,4);
+    //
+    int result = Select(0, v.size()-1, v,3);
+    printf("%d\n", result);
+
+    return 0;
+}
+
+/*
+爬坑指南：
+首先要确定一个问题，第k大元素和第k小元素不是一回事。假设数组是nums[l,r]，下标从l到r
+其次，第k大元素是指从最大元素开始数，也就是说最大元素是第1大元素，最小元素是第length-1大元素，第k大元素是r-i+1,i是目前元素的index
+第k小元素是从最小值开始数，也就是说最小元素是第1小元素，最大元素是第length-1小元素，第k小元素是i-l+1,i是目前元素的index
+
+对于快速排序，可以把这个框架定死，基本也就这种套路了。
+*/
